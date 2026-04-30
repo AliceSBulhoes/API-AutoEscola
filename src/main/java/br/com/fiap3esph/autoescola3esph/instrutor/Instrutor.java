@@ -2,6 +2,7 @@ package br.com.fiap3esph.autoescola3esph.instrutor;
 
 import br.com.fiap3esph.autoescola3esph.endereco.Endereco;
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -33,5 +34,20 @@ public class Instrutor {
         this.cnh = dados.cnh();
         this.especialidade = dados.especialidade();
         this.endereco = new Endereco(dados.endereco());
+    }
+
+    public void atualizarInformacoes(@Valid DadosAtualizacaoInstrutor dados) {
+        if(dados.nome() != null && !dados.nome().isBlank()){
+            this.nome = dados.nome();
+        }
+        if(dados.email() != null && !dados.email().isBlank()){
+            this.email = dados.email();
+        }
+        if(dados.especialidade() != null){
+            this.especialidade = dados.especialidade();
+        }
+        if(dados.endereco() != null){
+            this.endereco.atualizarInformacoes(dados.endereco());
+        }
     }
 }
