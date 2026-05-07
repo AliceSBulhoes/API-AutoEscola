@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,7 +28,13 @@ public class InstrutorController {
     @GetMapping
     public Page<DadosListagemInstrutor> listarInstrutores(
             @PageableDefault(size = 10, sort = "nome") Pageable paginacao){
-        return repository .findAll(paginacao).map(DadosListagemInstrutor::new);
+        return repository.findAllByAtivoTrue(paginacao).map(DadosListagemInstrutor::new);
+    }
+
+    @GetMapping("/{id}")
+    public DadosDetalhamentoInstrutor detalharInstrutor(@PathVariable Long id){
+        Instrutor instrutor = repository.getReferenceById(id);
+        return new DadosDetalhamentoInstrutor(instrutor);
     }
 
     @PutMapping
@@ -44,8 +51,14 @@ public class InstrutorController {
 
     @DeleteMapping("/{id}")
     @Transactional
-    public void deletarInstrutores(@PathVariable Long id){
+    public ResponseEntity deletarInstrutores(@PathVariable Long id){
+        // ABOLIDO!
+        // repository.deleteById(id);
+        Instrutor instrutor = repository.getReferenceById(id);
+        instrutor.excluir();
+        repository.save(instrutor);
 
-        repository.deleteById(id);
+        return ResponseEntity.noContent().build();
+
     }
 }

@@ -21,6 +21,7 @@ public class Instrutor {
     private String nome;
     private String email;
     private String cnh;
+    private String telefone;
 
     @Enumerated(EnumType.STRING)
     private Especialidade especialidade;
@@ -28,10 +29,13 @@ public class Instrutor {
     @Embedded
     private Endereco endereco;
 
+    private boolean ativo = true;
+
     public Instrutor(DadosCadastroInstrutor dados) {
         this.nome = dados.nome();
         this.email = dados.email();
         this.cnh = dados.cnh();
+        this.telefone = dados.telefone();
         this.especialidade = dados.especialidade();
         this.endereco = new Endereco(dados.endereco());
     }
@@ -46,8 +50,15 @@ public class Instrutor {
         if(dados.especialidade() != null){
             this.especialidade = dados.especialidade();
         }
+        if (dados.telefone() != null && !dados.telefone().isBlank()){
+            this.telefone = dados.telefone();
+        }
         if(dados.endereco() != null){
             this.endereco.atualizarInformacoes(dados.endereco());
         }
+    }
+
+    public void excluir() {
+        this.ativo = false;
     }
 }

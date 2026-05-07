@@ -19,6 +19,9 @@ public record DadosCadastroInstrutor(
         @Pattern(regexp = "[0-9]{9,11}")
         String cnh,
 
+        @NotBlank(message = "Telefone é obrigatório")
+        String telefone,
+
         @NotNull(message = "Especialidade é obrigatório")
         Especialidade especialidade,
 

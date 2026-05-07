@@ -25,5 +25,15 @@ public record DadosEndereco(
         @Pattern(regexp = "\\d{5}-\\d{3}")
         String cep
 ) {
-
+        public DadosEndereco(Endereco endereco){
+                this(
+                        endereco.getLogradouro(),
+                        endereco.getNumero(),
+                        endereco.getComplemento(),
+                        endereco.getBairro(),
+                        endereco.getCidade(),
+                        endereco.getUf(),
+                        endereco.getCep()
+                );
+        }
 }
