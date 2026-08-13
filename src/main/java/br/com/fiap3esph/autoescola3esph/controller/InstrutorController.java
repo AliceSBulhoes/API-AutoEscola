@@ -1,8 +1,10 @@
 package br.com.fiap3esph.autoescola3esph.controller;
 
+import br.com.fiap3esph.autoescola3esph.infra.security.TokenService;
 import br.com.fiap3esph.autoescola3esph.instrutor.*;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,9 +16,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/instrutores")
+@RequiredArgsConstructor
 public class InstrutorController {
-    @Autowired
-    private InstrutorRepository repository;
+    private final InstrutorRepository repository;
+    private final TokenService tokenService;
 
     @PostMapping
     @Transactional
