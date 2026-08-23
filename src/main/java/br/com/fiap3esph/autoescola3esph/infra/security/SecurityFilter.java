@@ -1,6 +1,6 @@
 package br.com.fiap3esph.autoescola3esph.infra.security;
 
-import br.com.fiap3esph.autoescola3esph.usuario.UsuarioRepository;
+import br.com.fiap3esph.autoescola3esph.domain.usuario.UsuarioRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -20,7 +20,7 @@ public class SecurityFilter extends OncePerRequestFilter {
     private TokenService tokenService;
 
     @Autowired
-    private UsuarioRepository usuarioRepository;
+    private UsuarioRepository repository;
 
     @Override
     protected void doFilterInternal(
@@ -28,11 +28,15 @@ public class SecurityFilter extends OncePerRequestFilter {
             HttpServletResponse response,
             FilterChain filterChain) throws ServletException, IOException {
         String tokenJWT = recuperarToken(request);
-        System.out.println(tokenJWT);
-        if(tokenJWT != null){
+
+        if (tokenJWT != null) {
             String subject = tokenService.getSubject(tokenJWT);
-            UserDetails usuario = usuarioRepository.findByLogin(subject);
-            var authenticated = new UsernamePasswordAuthenticationToken(usuario,null, usuario.getAuthorities());
+            UserDetails usuario = repository.findByLogin(subject);
+            var authenticated = new UsernamePasswordAuthenticationToken(
+                    usuario,
+                    null,
+                    usuario.getAuthorities()
+            );
             SecurityContextHolder.getContext().setAuthentication(authenticated);
         }
 
@@ -41,10 +45,9 @@ public class SecurityFilter extends OncePerRequestFilter {
 
     private String recuperarToken(HttpServletRequest request) {
         String authorizationHeader = request.getHeader("Authorization");
-        if(authorizationHeader != null) {
+        if (authorizationHeader != null) {
             return authorizationHeader.replace("Bearer ", "");
-        } else {
-            return null;
         }
+        return null;
     }
 }
