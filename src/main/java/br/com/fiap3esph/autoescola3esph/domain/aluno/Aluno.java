@@ -24,4 +24,6 @@ public class Aluno {
 
     @Embedded
     private Endereco endereco;
+
+    private boolean ativo;
 }
